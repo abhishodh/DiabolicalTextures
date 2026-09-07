@@ -194,7 +194,7 @@ function plot_scaling(table, densities)
     ax.set_xlim(330,9200)
     ax.set_ylim(0.735,1.17)
     ax.set_xlabel(L"L"; fontsize=17, labelpad=3)
-    ax.set_ylabel(L"S(3L/4)"; fontsize=17, labelpad=2)
+    ax.set_ylabel(L"S(x^*)"; fontsize=17, labelpad=2)
     ax.set_yticks([0.75,0.85,0.95,1.05])
     ax.tick_params(axis="x",which="minor",bottom=false)
     ax.legend([fit_line],[L"A+\frac{1}{12}\log\!\left(\frac{3L}{4}\right)"];
