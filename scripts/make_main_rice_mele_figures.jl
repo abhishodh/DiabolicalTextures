@@ -134,12 +134,11 @@ function plot_flow(alpha, beta, ea, eb)
 end
 
 function plot_scaling(table, densities)
-    fig, axs = subplots(1,3; figsize=(7.0,3.55),
+    fig, axs = subplots(1,3; figsize=(7.0,3.25),
                        gridspec_kw=Dict("width_ratios"=>[1.0,1.15,1.0]))
-    fig.subplots_adjust(left=0.085,right=0.985,bottom=0.21,top=0.715,wspace=0.57)
+    fig.subplots_adjust(left=0.085,right=0.985,bottom=0.23,top=0.87,wspace=0.57)
     for (ax, letter) in zip(axs, ["a","b","c"])
-        ax.text(0.5,1.36,"("*letter*")"; transform=ax.transAxes,
-                fontsize=17,ha="center",va="bottom")
+        ax.set_title("("*letter*")"; fontsize=17,pad=8)
         ax.tick_params(labelsize=14, length=3, pad=3)
     end
     Ls = table[:,1]
@@ -151,13 +150,13 @@ function plot_scaling(table, densities)
     ax.set_xlabel(L"1/\sqrt{L}"; fontsize=17, labelpad=3)
     ax.set_ylabel(L"\Delta"; fontsize=18, labelpad=1)
     ax.set_xlim(-0.002,0.053)
-    ax.set_ylim(-0.007,0.197)
+    ax.set_ylim(-0.007,0.255)
     ax.set_xticks([0,0.025,0.05])
     ax.set_xticklabels([L"0",L"0.025",L"0.05"])
     ax.set_yticks([0,0.1,0.2])
     ax.set_yticklabels([L"0",L"0.1",L"0.2"])
-    ax.legend([theory_line],[L"\sqrt{4\pi/L}"];
-              loc="lower center",bbox_to_anchor=(0.5,1.08),fontsize=15,
+    ax.legend([theory_line],[L"\sqrt{\frac{4\pi}{L}}"];
+              loc="upper center",bbox_to_anchor=(0.5,0.99),fontsize=15,
               handlelength=1.2,handletextpad=0.4,borderaxespad=0,frameon=false)
 
     ax = axs[2]
@@ -193,15 +192,16 @@ function plot_scaling(table, densities)
     ax.set_xticks([400,1600,6400])
     ax.set_xticklabels([L"400",L"1600",L"6400"])
     ax.set_xlim(330,9200)
+    ax.set_ylim(0.735,1.17)
     ax.set_xlabel(L"L"; fontsize=17, labelpad=3)
     ax.set_ylabel(L"S(3L/4)"; fontsize=17, labelpad=2)
     ax.set_yticks([0.75,0.85,0.95,1.05])
     ax.tick_params(axis="x",which="minor",bottom=false)
-    ax.legend([fit_line],[L"A_{\rm fit}+\log(3L/4)/12"];
-              loc="lower right",bbox_to_anchor=(1.0,1.19),fontsize=13,
-              handlelength=1.1,handletextpad=0.35,borderaxespad=0,frameon=false)
-    ax.text(0.5,1.05,latexstring("A_{\\rm fit}\\approx ",round(offset;digits=2));
-            transform=ax.transAxes,fontsize=14,ha="center",va="bottom")
+    ax.legend([fit_line],[L"A+\frac{1}{12}\log\!\left(\frac{3L}{4}\right)"];
+              loc="upper center",bbox_to_anchor=(0.5,0.99),fontsize=12,
+              handlelength=0.9,handletextpad=0.3,borderaxespad=0,frameon=false)
+    ax.text(0.5,0.79,latexstring("A\\approx ",round(offset;digits=2));
+            transform=ax.transAxes,fontsize=14,ha="center",va="center")
     fig.savefig(joinpath(ROOT,"Scaling.pdf"))
     fig.savefig(joinpath(DATA,"scaling.png"); dpi=210)
     close(fig)
