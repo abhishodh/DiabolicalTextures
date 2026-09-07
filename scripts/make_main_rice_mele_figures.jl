@@ -134,17 +134,19 @@ function plot_flow(alpha, beta, ea, eb)
 end
 
 function plot_scaling(table, densities)
-    fig, axs = subplots(1,3; figsize=(7.0,3.05),
+    fig, axs = subplots(1,3; figsize=(7.0,3.55),
                        gridspec_kw=Dict("width_ratios"=>[1.0,1.15,1.0]))
-    fig.subplots_adjust(left=0.085,right=0.985,bottom=0.245,top=0.83,wspace=0.57)
+    fig.subplots_adjust(left=0.085,right=0.985,bottom=0.21,top=0.715,wspace=0.57)
     for (ax, letter) in zip(axs, ["a","b","c"])
-        ax.set_title("("*letter*")"; fontsize=17, pad=8)
+        ax.text(0.5,1.36,"("*letter*")"; transform=ax.transAxes,
+                fontsize=17,ha="center",va="bottom")
         ax.tick_params(labelsize=14, length=3, pad=3)
     end
     Ls = table[:,1]
     invL = 1 ./ sqrt.(Ls)
     ax = axs[1]
-    ax.plot([0,0.052], sqrt(4pi).*[0,0.052]; color=BLACK, linestyle="--", linewidth=1.3)
+    theory_line = ax.plot([0,0.052], sqrt(4pi).*[0,0.052];
+                          color=BLACK, linestyle="--", linewidth=1.3)[1]
     ax.plot(invL,table[:,2],"o"; color=BLUE, ms=4.0, label="data")
     ax.set_xlabel(L"1/\sqrt{L}"; fontsize=17, labelpad=3)
     ax.set_ylabel(L"\Delta"; fontsize=18, labelpad=1)
@@ -154,8 +156,9 @@ function plot_scaling(table, densities)
     ax.set_xticklabels([L"0",L"0.025",L"0.05"])
     ax.set_yticks([0,0.1,0.2])
     ax.set_yticklabels([L"0",L"0.1",L"0.2"])
-    ax.text(0.035,0.91,L"\sqrt{4\pi/L}"; transform=ax.transAxes,
-            fontsize=15, ha="left",va="top")
+    ax.legend([theory_line],[L"\sqrt{4\pi/L}"];
+              loc="lower center",bbox_to_anchor=(0.5,1.08),fontsize=15,
+              handlelength=1.2,handletextpad=0.4,borderaxespad=0,frameon=false)
 
     ax = axs[2]
     markers = ["o","s","^","v","D"]
@@ -183,7 +186,8 @@ function plot_scaling(table, densities)
     S = table[:,3]
     offset = sum(S .- log.(0.75.*Ls)./12)/length(Ls)
     lf = exp.(range(log(minimum(Ls)),log(maximum(Ls));length=150))
-    ax.plot(lf, offset .+ log.(0.75.*lf)./12; color=BLACK, ls="--", linewidth=1.3)
+    fit_line = ax.plot(lf, offset .+ log.(0.75.*lf)./12;
+                       color=BLACK, ls="--", linewidth=1.3)[1]
     ax.plot(Ls,S,"o"; color=BLUE, ms=4)
     ax.set_xscale("log")
     ax.set_xticks([400,1600,6400])
@@ -193,13 +197,22 @@ function plot_scaling(table, densities)
     ax.set_ylabel(L"S(3L/4)"; fontsize=17, labelpad=2)
     ax.set_yticks([0.75,0.85,0.95,1.05])
     ax.tick_params(axis="x",which="minor",bottom=false)
+    ax.legend([fit_line],[L"A_{\rm fit}+\log(3L/4)/12"];
+              loc="lower right",bbox_to_anchor=(1.0,1.19),fontsize=13,
+              handlelength=1.1,handletextpad=0.35,borderaxespad=0,frameon=false)
+    ax.text(0.5,1.05,latexstring("A_{\\rm fit}\\approx ",round(offset;digits=2));
+            transform=ax.transAxes,fontsize=14,ha="center",va="bottom")
     fig.savefig(joinpath(ROOT,"Scaling.pdf"))
     fig.savefig(joinpath(DATA,"scaling.png"); dpi=210)
     close(fig)
 end
 
 function main()
-if "--flow-only" in ARGS
+if "--scaling-only" in ARGS
+    table = readdlm(joinpath(DATA,"gap_entropy.csv"),',',Float64)
+    densities = Dict(L=>readdlm(joinpath(DATA,"density_L$(L).csv"),',',Float64) for L in DENSITY_SIZES)
+    plot_scaling(table,densities)
+elseif "--flow-only" in ARGS
     plot_flow(flow_data()...)
 elseif "--plot-only" in ARGS
     aa = readdlm(joinpath(DATA,"flow_alpha_L200.csv"),',',Float64)
