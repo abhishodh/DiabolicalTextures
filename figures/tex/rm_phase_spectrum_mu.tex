@@ -1,0 +1,153 @@
+\documentclass[tikz,border=1pt]{standalone}
+\usepackage{amsmath,graphicx}
+
+\definecolor{nuzerophase}{RGB}{166,213,226}
+\definecolor{nuonephase}{RGB}{220,139,142}
+\definecolor{metalphase}{RGB}{180,159,205}
+\definecolor{metalboundary}{RGB}{74,58,126}
+\definecolor{capboundary}{RGB}{189,89,43}
+\definecolor{defectboundary}{RGB}{55,55,60}
+\definecolor{zerolocus}{RGB}{92,105,116}
+\definecolor{axiscolor}{RGB}{38,38,42}
+
+\begin{document}
+\begin{tikzpicture}[
+  every node/.style={font=\fontsize{14.4}{16}\selectfont},
+  phase label/.style={font=\fontsize{14.4}{16}\selectfont},
+  critical label/.style={font=\fontsize{14.4}{16}\selectfont},
+  tick label/.style={font=\fontsize{14.4}{16}\selectfont},
+  axis label/.style={font=\fontsize{17.28}{19}\selectfont},
+  panel label/.style={font=\fontsize{17.28}{19}\selectfont},
+  parameter label/.style={font=\fontsize{14.4}{16}\selectfont,
+                          draw=axiscolor,fill=white,line width=0.60pt,
+                          inner xsep=3.5pt,inner ysep=2.2pt},
+  phase boundary/.style={metalboundary,line width=2.0pt,
+                         line cap=round,line join=round},
+  cap boundary/.style={capboundary,solid,line width=2pt,
+                       line cap=round,line join=round},
+  zero bulk/.style={zerolocus,dash pattern=on 4.0pt off 1.5pt on 1.0pt off 1.5pt, line width=3.60pt,line cap=round,line join=round},
+  defect locus/.style={defectboundary,dotted,line width=1.0pt,
+                       line cap=round,line join=round},
+                       scale=0.75
+]
+
+\node[anchor=south west,inner sep=0] at (0,0)
+ {\includegraphics[width=11.0cm]{rice_mele_spectral_panels.pdf}};
+
+% Panel (e): separate zero- and finite-chemical-potential phase diagrams.
+\begin{scope}[shift={(22.50cm,8.85cm)},x=3.25cm,y=6.2cm]
+  \def\A{2}
+  \fill[nuzerophase] (-\A,0) rectangle (\A,1);
+  \path[fill=nuonephase]
+    (-1,0)--(1,0)--(1,0.25)
+    -- plot[domain=0.25:0.75,samples=220,smooth,variable=\t]
+       ({sin(360*\t)},{\t})
+    --(-1,0.75)--cycle;
+
+  \draw[zero bulk] (1,0)--(1,0.25);
+  \draw[zero bulk] (-1,0)--(-1,0.75);
+  \draw[defect locus]
+    plot[domain=0.25:0.75,samples=220,smooth,variable=\t]
+      ({sin(360*\t)},{\t});
+
+  \node[parameter label,anchor=north west] at (-1.88,0.95) {$\mu=0$};
+  \node[phase label] at (-1.53,0.20) {$\nu_\gamma=0$};
+  \node[phase label] at (-0.30,0.20) {$\nu_\gamma=-1$};
+
+  % Legend for the zero-chemical-potential plot.
+  \node[critical label] at (1.30,0.91) {$(z,p,\vartheta)$};
+  \draw[zero bulk] (0.48,0.78)--(0.80,0.78);
+  \node[critical label,anchor=west] at (0.90,0.78) {$(1,1,1/2)$};
+  \draw[defect locus] (0.48,0.64)--(0.80,0.64);
+  \node[critical label,anchor=west] at (0.90,0.64) {defect};
+
+  \draw[axiscolor,line width=0.60pt] (-\A,0) rectangle (\A,1);
+  \foreach \x in {-2,-1,0,1,2}{
+    \draw[axiscolor,line width=0.50pt] (\x,0)--++(0,-0.030);
+  }
+  \foreach \y/\lab in {0./$0$,0.5/$ $,.9/$1$}{
+    \draw[axiscolor,line width=0.50pt] (-\A,\y)--++(-0.040,0);
+    \node[left,tick label] at (-\A-0.032,\y) {\lab};
+  }
+  \node[rotate=90,axis label] at (-\A-0.30,0.5) {$\beta$};
+  \node[panel label] at (0,1.11) {(e)};
+\end{scope}
+
+\begin{scope}[shift={(22.50cm,2.10cm)},x=3.25cm,y=6.2cm]
+  \def\A{2}
+  \def\M{0.35}
+  \pgfmathsetmacro{\Bcap}{acos(-\M)/360}
+  \fill[nuzerophase] (-\A,0) rectangle (\A,1);
+
+  % Representative finite chemical potential.
+  \path[fill=nuonephase]
+    ({-1+\M},0)--({1-\M},0)--({1-\M},0.25)--({1+\M},0.25)
+    -- plot[domain=0.25:0.75,samples=220,smooth,variable=\t]
+       ({sin(360*\t)+\M},{\t})
+    --({-1+\M},0.75)--cycle;
+  \path[fill=metalphase]
+    ({1-\M},0)--({1+\M},0)--({1+\M},0.25)
+    -- plot[domain=0.25:\Bcap,samples=100,smooth,variable=\t]
+       ({sin(360*\t)+sqrt(max(0,\M*\M-pow(cos(360*\t),2)))},{\t})
+    -- plot[domain=\Bcap:0.25,samples=100,smooth,variable=\t]
+       ({sin(360*\t)-sqrt(max(0,\M*\M-pow(cos(360*\t),2)))},{\t})
+    --cycle;
+  \path[fill=metalphase]
+    ({-1-\M},0)--({-1+\M},0)--({-1+\M},0.75)
+    -- plot[domain=0.75:{0.5+\Bcap},samples=100,smooth,variable=\t]
+       ({sin(360*\t)+sqrt(max(0,\M*\M-pow(cos(360*\t),2)))},{\t})
+    -- plot[domain={0.5+\Bcap}:0.75,samples=100,smooth,variable=\t]
+       ({sin(360*\t)-sqrt(max(0,\M*\M-pow(cos(360*\t),2)))},{\t})
+    --cycle;
+
+  \draw[phase boundary] ({1-\M},0)--({1-\M},0.25);
+  \draw[phase boundary] ({1+\M},0)--({1+\M},0.25);
+  \draw[phase boundary] ({-1-\M},0)--({-1-\M},0.75);
+  \draw[phase boundary] ({-1+\M},0)--({-1+\M},0.75);
+  \draw[cap boundary]
+    plot[domain=0.25:\Bcap,samples=100,smooth,variable=\t]
+      ({sin(360*\t)-sqrt(max(0,\M*\M-pow(cos(360*\t),2)))},{\t})
+    -- plot[domain=\Bcap:0.25,samples=100,smooth,variable=\t]
+      ({sin(360*\t)+sqrt(max(0,\M*\M-pow(cos(360*\t),2)))},{\t});
+  \draw[cap boundary]
+    plot[domain=0.75:{0.5+\Bcap},samples=100,smooth,variable=\t]
+      ({sin(360*\t)+sqrt(max(0,\M*\M-pow(cos(360*\t),2)))},{\t})
+    -- plot[domain={0.5+\Bcap}:0.75,samples=100,smooth,variable=\t]
+      ({sin(360*\t)-sqrt(max(0,\M*\M-pow(cos(360*\t),2)))},{\t});
+  \foreach \x/\y in {{1-\M}/0.25,{1+\M}/0.25,{-1-\M}/0.75,{-1+\M}/0.75}{
+    \fill[metalboundary] (\x,\y) circle[radius=2.8pt];
+  }
+  \draw[defect locus]
+    plot[domain=0.25:0.75,samples=220,smooth,variable=\t]
+      ({sin(360*\t)+\M},{\t});
+
+  \node[parameter label,anchor=north west] at (-1.88,0.98) {$\mu\ne0$};
+  \node[phase label] at (-1.69,0.16) {$\nu_\gamma=0$};
+  \node[phase label] at (0.00,0.16) {$\nu_\gamma=-1$};
+  \node[phase label,rotate=90] at (1.00,0.15) {metal};
+  \node[phase label,rotate=90] at (-1.00,0.34) {metal};
+
+  % Legend for the finite-chemical-potential plot.
+  \node[critical label] at (1.40,0.91) {$(z,p,\vartheta)$};
+  \draw[phase boundary] (0.48+0.1,0.78)--(0.80+0.1,0.78);
+  \node[critical label,anchor=west] at (0.90+0.1,0.78) {$(2,2,1/2)$};
+  \draw[cap boundary] (0.48+0.1,0.64)--(0.80+0.1,0.64);
+  \node[critical label,anchor=west] at (0.90+0.1,0.64) {$(2,1,1/3)$};
+  \draw[defect locus] (0.48+0.1,0.50)--(0.80+0.1,0.50);
+  \node[critical label,anchor=west] at (0.90+0.1,0.50) {defect};
+
+  \draw[axiscolor,line width=0.60pt] (-\A,0) rectangle (\A,1);
+  \foreach \x in {-2,-1,0,1,2}{
+    \draw[axiscolor,line width=0.50pt] (\x,0)--++(0,-0.030);
+    \node[below,tick label] at (\x,-0.025) {$\x$};
+  }
+  \foreach \y/\lab in {0/$0$,0.5/$ $,0.9/$1$}{
+    \draw[axiscolor,line width=0.50pt] (-\A,\y)--++(-0.040,0);
+    \node[left,tick label] at (-\A-0.032,\y) {\lab};
+  }
+  \node[below,axis label] at (0,-0.16) {$\alpha$};
+  \node[rotate=90,axis label] at (-\A-0.30,0.5) {$\beta$};
+\end{scope}
+
+\end{tikzpicture}
+\end{document}
