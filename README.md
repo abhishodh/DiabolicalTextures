@@ -63,6 +63,12 @@ For Main 1, keep (a,b) stacked at left, place (c,d,e) at equal height in
 the upper-right row, and place equally sized (f,g) in the row below.
 Extract and relabel the source panels according to the table. The gap
 panel 1(d) shows the trap-critical scaling $\Delta\sim1/\sqrt{L}$.
+After assembling Main 1, prepare its embedded fonts for inclusion in LaTeX:
+
+```sh
+python scripts/prepare_pdf_fonts.py build/figure1_layout.pdf
+```
+
 For End Matter 3, place only the local-observable and entanglement panels
 side by side, relabeled (a,b). For Supplemental 4 and 9, place the phase diagram and
 scaling plot side by side at 66% and 32% of the line width, respectively.
