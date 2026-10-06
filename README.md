@@ -26,15 +26,15 @@ python reproduce.py all
 To generate a subset, replace `all` with a group in the table below.
 Use `--output PATH` to choose another output directory.
 
-The table maps manuscript panels to the generated PDFs and their source panels.
+The table maps manuscript figures to the generated PDFs.
 
 | Figure | Group | Generated source |
 | --- | --- | --- |
 | Main 1(a,b) | `main-rm` | `texture.pdf` |
-| Main 1(c) | `main-rm` | `rice_mele_spectral_panels.pdf`, upper panel (spectral flow in alpha) |
+| Main 1(c) | `main-rm` | `rice_mele_spectral_panels.pdf` (spectral flow in alpha) |
 | Main 1(d) | `main-rm` | `Scaling.pdf`, panel (a) (neutral-gap scaling) |
-| Main 1(e) | `main-rm` | `rice_mele_spectral_panels.pdf`, lower panel (spectral flow in beta) |
-| Main 1(f,g) | `main-rm` | `rm_phase_spectrum_mu.pdf`, upper and lower right-hand phase diagrams |
+| Main 1(e) | `main-rm` | `rice_mele_spectral_panels.pdf` (spectral flow in beta) |
+| Main 1(f,g) | `main-rm` | `rm_phase_spectrum_mu.pdf` |
 | Main 2 | `diagrams` | `classd_phase_2panel.pdf` |
 | End Matter 3(a,b) | `main-rm` | `Scaling.pdf`, panels (b,c) (local observable and entanglement) |
 | Supplemental 1 | `landau` | `Spectrum collapse and Wavefunctions.pdf` |
@@ -55,18 +55,3 @@ The generators in `scripts/` are:
 - `supp-numerics`: `make_numerical_universality_figures.jl`.
 - `continuum`: `make_classd_supp_figures.py`.
 - `diagrams`: `make_rice_mele_texture.jl` and the sources in `figures/tex/`.
-
-The `main-rm` group also compiles `figures/tex/rm_phase_spectrum_mu.tex`.
-For Main 1, keep (a,b) stacked at left, place (c,d,e) at equal height in
-the upper-right row, and place equally sized (f,g) in the row below.
-Extract and relabel the source panels according to the table. The gap
-panel 1(d) shows the trap-critical scaling $\Delta\sim1/\sqrt{L}$.
-After assembling Main 1, prepare its embedded fonts for inclusion in LaTeX:
-
-```sh
-python scripts/prepare_pdf_fonts.py build/figure1_layout.pdf
-```
-
-For End Matter 3, place only the local-observable and entanglement panels
-side by side, relabeled (a,b). For Supplemental 4 and 8, place the phase diagram and
-scaling plot side by side at 66% and 32% of the line width, respectively.
