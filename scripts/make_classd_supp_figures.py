@@ -1,8 +1,6 @@
 """Vector figures for the Class-D Supplement, from the stated continuum theory.
 
-The edge envelopes and dispersions are the local linear-mass solutions, not
-finite-lattice data. The quadratic-trap eigenfunctions are computed by a
-converged finite-difference solution of the dimensionless squared Dirac operator.
+The edge envelopes and dispersions follow from the local linear-mass solutions.
 """
 
 from pathlib import Path
@@ -49,19 +47,6 @@ def width_fraction(alpha, rho):
     inside = (a > 1-r) & (a < 1+r)
     q = (1+a*a-r*r)/(2*np.maximum(a, 1e-15))
     return np.where(inside, np.arccos(np.clip(q, -1, 1))/np.pi, 0.0)
-
-
-def quadratic_trap(n=2400, extent=8.0, states=3):
-    du = 2*extent/(n+1)
-    u = np.linspace(-extent, extent, n+2)[1:-1]
-    diag = 2/du**2 + u**4 - 2*u
-    off = np.full(n-1, -1/du**2)
-    matrix = np.diag(diag) + np.diag(off, 1) + np.diag(off, -1)
-    vals, vecs = np.linalg.eigh(matrix)
-    vals, vecs = vals[:states], vecs[:, :states]
-    vecs /= np.sqrt(du)
-    density = (vecs[:, 0]**2 + vecs[::-1, 0]**2)/2
-    return u, np.sqrt(vals), density, du
 
 
 def droplets(save):
@@ -146,39 +131,12 @@ def droplets(save):
             "first_transverse_gap": float(np.sqrt(2*v*gradient))}
 
 
-def trap_figure(save, u, energies, density):
-    fig, axes = plt.subplots(1, 2, figsize=(7.8, 3.2))
-    ax = axes[0]
-    ax.plot(u, np.exp(-u*u)/np.sqrt(np.pi), color=DATA_BLUE,
-            label=r"$p=1,\ \vartheta=1/2$")
-    ax.plot(u, density, color=DATA_RED, label=r"$p=2,\ \vartheta=2/3$")
-    ax.set(xlim=(-3.5, 3.5), ylim=(0, 0.62), xlabel=r"$u=(y-y_*)/\ell$",
-           ylabel=r"$\ell |f(y)|^2$")
-    ax.legend(frameon=False, loc="upper right", fontsize=8.5)
-    panel(ax, "a")
-    ax = axes[1]
-    k = np.linspace(-1.6, 1.6, 500)
-    for sign in [-1, 1]:
-        ax.plot(k, sign*k, color=DATA_BLUE, label=r"$p=1$" if sign == 1 else None)
-        ax.plot(k, sign*np.sqrt(k*k+2), color=DATA_BLUE, ls="--", lw=1.0, alpha=0.6)
-        ax.plot(k, sign*np.sqrt(k*k+energies[0]**2), color=DATA_RED,
-                label=r"$p=2$" if sign == 1 else None)
-        ax.plot(k, sign*np.sqrt(k*k+energies[1]**2), color=DATA_RED, ls="--", lw=1.0, alpha=0.6)
-    ax.set(xlim=(-1.6, 1.6), ylim=(-2.6, 2.6), xlabel=r"$k_x\ell$", ylabel=r"$E\ell/v$")
-    ax.legend(frameon=False, loc="upper center", ncol=2)
-    panel(ax, "b")
-    fig.subplots_adjust(left=0.095, right=0.98, bottom=0.2, top=0.85, wspace=0.28)
-    save(fig, "classd_trap_modes")
-
-
 def main():
     def save(fig, stem):
         fig.savefig(ROOT/f"{stem}.pdf", metadata={"CreationDate": None, "ModDate": None})
         plt.close(fig)
 
-    u, energies, density, _ = quadratic_trap()
     droplets(save)
-    trap_figure(save, u, energies, density)
 
 
 if __name__ == "__main__":

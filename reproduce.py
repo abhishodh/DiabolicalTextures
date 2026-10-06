@@ -1,4 +1,4 @@
-"""Generate the main-text and supplemental figures."""
+"""Generate figures for the main text, End Matter, and supplement."""
 
 from pathlib import Path
 import argparse
@@ -10,14 +10,15 @@ import sys
 ROOT = Path(__file__).resolve().parent
 
 GROUPS = {
-    "main-rm": ["texture.pdf", "rm_phase_spectrum_mu.pdf", "Scaling.pdf"],
+    "main-rm": ["texture.pdf", "rice_mele_spectral_panels.pdf",
+                "rm_phase_spectrum_mu.pdf", "Scaling.pdf"],
     "landau": ["Spectrum collapse and Wavefunctions.pdf"],
     "supp-numerics": ["rice_mele_droplet_profiles.pdf", "rice_mele_numerical_scaling.pdf",
                       "classd_numerical_scaling.pdf", "classd_numerical_spectral_flow.pdf"],
-    "continuum": ["classd_droplets_edges.pdf", "classd_trap_modes.pdf"],
+    "continuum": ["classd_droplets_edges.pdf"],
     "diagrams": ["classd_phase_2panel.pdf", "rice_mele_homogeneous_phases.pdf",
                  "classd_homogeneous_phases.pdf", "rice_mele_unwinding_phases.pdf",
-                 "classd_unwinding_phases_norho.pdf", "suspension_construction_schematic.pdf"],
+                 "classd_unwinding_phases_norho.pdf"],
 }
 
 

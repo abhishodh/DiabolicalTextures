@@ -45,10 +45,8 @@ The table maps manuscript panels to the generated PDFs and their source panels.
 | Supplemental 5 | `diagrams` | `classd_homogeneous_phases.pdf` |
 | Supplemental 6 | `continuum` | `classd_droplets_edges.pdf` |
 | Supplemental 7 | `supp-numerics` | `classd_numerical_spectral_flow.pdf` |
-| Supplemental 8 | `continuum` | `classd_trap_modes.pdf` |
-| Supplemental 9(a,b) | `diagrams` | `classd_unwinding_phases_norho.pdf` |
-| Supplemental 9(c) | `supp-numerics` | `classd_numerical_scaling.pdf` |
-| Supplemental 10 | `diagrams` | `suspension_construction_schematic.pdf` |
+| Supplemental 8(a,b) | `diagrams` | `classd_unwinding_phases_norho.pdf` |
+| Supplemental 8(c) | `supp-numerics` | `classd_numerical_scaling.pdf` |
 
 The generators in `scripts/` are:
 
@@ -70,5 +68,5 @@ python scripts/prepare_pdf_fonts.py build/figure1_layout.pdf
 ```
 
 For End Matter 3, place only the local-observable and entanglement panels
-side by side, relabeled (a,b). For Supplemental 4 and 9, place the phase diagram and
+side by side, relabeled (a,b). For Supplemental 4 and 8, place the phase diagram and
 scaling plot side by side at 66% and 32% of the line width, respectively.

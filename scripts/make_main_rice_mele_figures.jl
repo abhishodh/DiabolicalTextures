@@ -110,12 +110,12 @@ function spectrum_panel!(ax, parameter, levels, xlabel, title)
 end
 
 function plot_flow(alpha, beta, ea, eb)
-    # Vertically stacked spectral-flow panels (c,d).
+    # Spectral-flow source panels for Main 1(c,e).
     fig = figure(figsize=(360/72, 398.479/72))
     ac = fig.add_axes([0.20, 0.625, 0.76, 0.285])
     ad = fig.add_axes([0.20, 0.145, 0.76, 0.285])
     spectrum_panel!(ac, alpha, ea, L"\alpha", L"(c)\;\beta=0")
-    spectrum_panel!(ad, beta, eb, L"\beta", L"(d)\;\alpha=0")
+    spectrum_panel!(ad, beta, eb, L"\beta", L"(e)\;\alpha=0")
     for a in [-1,1]
         ac.axvline(a; color=BLACK, linewidth=0.9, linestyle="--", zorder=0)
     end

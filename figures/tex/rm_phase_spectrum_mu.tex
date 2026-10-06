@@ -34,8 +34,8 @@
 \node[anchor=south west,inner sep=0] at (0,0)
  {\includegraphics[width=11.0cm]{rice_mele_spectral_panels.pdf}};
 
-% Panel (e): separate zero- and finite-chemical-potential phase diagrams.
-\begin{scope}[shift={(22.50cm,8.85cm)},x=3.25cm,y=6.2cm]
+% Panels (f,g): zero- and finite-chemical-potential phase diagrams.
+\begin{scope}[shift={(22.50cm,9.75cm)},x=3.25cm,y=6.2cm]
   \def\A{2}
   \fill[nuzerophase] (-\A,0) rectangle (\A,1);
   \path[fill=nuonephase]
@@ -70,7 +70,7 @@
     \node[left,tick label] at (-\A-0.032,\y) {\lab};
   }
   \node[rotate=90,axis label] at (-\A-0.30,0.5) {$\beta$};
-  \node[panel label] at (0,1.11) {(e)};
+  \node[panel label] at (0,1.11) {(f)};
 \end{scope}
 
 \begin{scope}[shift={(22.50cm,2.10cm)},x=3.25cm,y=6.2cm]
@@ -147,6 +147,7 @@
   }
   \node[below,axis label] at (0,-0.16) {$\alpha$};
   \node[rotate=90,axis label] at (-\A-0.30,0.5) {$\beta$};
+  \node[panel label] at (0,1.11) {(g)};
 \end{scope}
 
 \end{tikzpicture}
